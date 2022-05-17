@@ -123,6 +123,7 @@
   <ItemGroup>
     <None Include="bin\Debug\Enemy\ghost_l.gif" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="bin\Debug\BackGrounds\lvl_1.jpg" />
   </ItemGroup>
