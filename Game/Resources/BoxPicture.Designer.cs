@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Game {
+namespace Game.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Game {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class GameBG {
+    internal class BoxPicture {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal GameBG() {
+        internal BoxPicture() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Game {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Game.GameBG", typeof(GameBG).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Game.Resources.BoxPicture", typeof(BoxPicture).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -63,9 +63,29 @@ namespace Game {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap lvl_1 {
+        internal static System.Drawing.Bitmap _1box {
             get {
-                object obj = ResourceManager.GetObject("lvl_1", resourceCulture);
+                object obj = ResourceManager.GetObject("_1box", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _3box {
+            get {
+                object obj = ResourceManager.GetObject("_3box", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _5box {
+            get {
+                object obj = ResourceManager.GetObject("_5box", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

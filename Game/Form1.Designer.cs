@@ -34,13 +34,16 @@
             this.GameProgressTimer = new System.Windows.Forms.Timer(this.components);
             this.KillLable = new System.Windows.Forms.Label();
             this.BoxCount = new System.Windows.Forms.Label();
+            this.EndOfGame = new System.Windows.Forms.Label();
+            this.LivePicture = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.MainHero)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LivePicture)).BeginInit();
             this.SuspendLayout();
             // 
             // MainHero
             // 
             this.MainHero.BackColor = System.Drawing.Color.Transparent;
-            this.MainHero.Location = new System.Drawing.Point(180, 246);
+            this.MainHero.Location = new System.Drawing.Point(569, 95);
             this.MainHero.Name = "MainHero";
             this.MainHero.Size = new System.Drawing.Size(70, 80);
             this.MainHero.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -61,30 +64,57 @@
             // 
             this.KillLable.AutoSize = true;
             this.KillLable.BackColor = System.Drawing.Color.Transparent;
-            this.KillLable.Font = new System.Drawing.Font("Segoe Script", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.KillLable.Location = new System.Drawing.Point(787, 9);
+            this.KillLable.Font = new System.Drawing.Font("Segoe Script", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.KillLable.Location = new System.Drawing.Point(897, 0);
             this.KillLable.Name = "KillLable";
-            this.KillLable.Size = new System.Drawing.Size(0, 51);
+            this.KillLable.Size = new System.Drawing.Size(306, 38);
             this.KillLable.TabIndex = 1;
+            this.KillLable.Text = "Противников убито: ";
             this.KillLable.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // BoxCount
             // 
             this.BoxCount.AutoSize = true;
             this.BoxCount.BackColor = System.Drawing.Color.Transparent;
-            this.BoxCount.Font = new System.Drawing.Font("Segoe Script", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.BoxCount.Location = new System.Drawing.Point(787, 60);
+            this.BoxCount.Font = new System.Drawing.Font("Segoe Script", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.BoxCount.Location = new System.Drawing.Point(897, 38);
             this.BoxCount.Name = "BoxCount";
-            this.BoxCount.Size = new System.Drawing.Size(0, 51);
+            this.BoxCount.Size = new System.Drawing.Size(280, 38);
             this.BoxCount.TabIndex = 2;
+            this.BoxCount.Text = "Коробочек собранно:";
             this.BoxCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // EndOfGame
+            // 
+            this.EndOfGame.AutoSize = true;
+            this.EndOfGame.BackColor = System.Drawing.Color.Transparent;
+            this.EndOfGame.Font = new System.Drawing.Font("Segoe Script", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EndOfGame.Location = new System.Drawing.Point(334, 232);
+            this.EndOfGame.Name = "EndOfGame";
+            this.EndOfGame.Size = new System.Drawing.Size(582, 102);
+            this.EndOfGame.TabIndex = 3;
+            this.EndOfGame.Text = "Игра окончена.";
+            this.EndOfGame.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.EndOfGame.Visible = false;
+            // 
+            // LivePicture
+            // 
+            this.LivePicture.BackColor = System.Drawing.Color.Transparent;
+            this.LivePicture.Location = new System.Drawing.Point(-4, 0);
+            this.LivePicture.Name = "LivePicture";
+            this.LivePicture.Size = new System.Drawing.Size(286, 76);
+            this.LivePicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.LivePicture.TabIndex = 4;
+            this.LivePicture.TabStop = false;
             // 
             // GameBackGround
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Lime;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.LivePicture);
+            this.Controls.Add(this.EndOfGame);
             this.Controls.Add(this.BoxCount);
             this.Controls.Add(this.KillLable);
             this.Controls.Add(this.MainHero);
@@ -94,6 +124,7 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Game_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Game_KeyUp);
             ((System.ComponentModel.ISupportInitialize)(this.MainHero)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LivePicture)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -106,6 +137,8 @@
         private System.Windows.Forms.Timer GameProgressTimer;
         private System.Windows.Forms.Label KillLable;
         private System.Windows.Forms.Label BoxCount;
+        private System.Windows.Forms.Label EndOfGame;
+        private System.Windows.Forms.PictureBox LivePicture;
     }
 }
 

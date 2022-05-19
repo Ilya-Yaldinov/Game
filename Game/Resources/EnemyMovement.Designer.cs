@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Game {
+namespace Game.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Game {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class HeroMovement {
+    internal class EnemyMovement {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal HeroMovement() {
+        internal EnemyMovement() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Game {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Game.HeroMovement", typeof(HeroMovement).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Game.Resources.EnemyMovement", typeof(EnemyMovement).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -63,39 +63,9 @@ namespace Game {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap l_d {
+        internal static System.Drawing.Bitmap ghost {
             get {
-                object obj = ResourceManager.GetObject("l_d", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap l_u {
-            get {
-                object obj = ResourceManager.GetObject("l_u", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap r_d {
-            get {
-                object obj = ResourceManager.GetObject("r_d", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap r_u {
-            get {
-                object obj = ResourceManager.GetObject("r_u", resourceCulture);
+                object obj = ResourceManager.GetObject("ghost", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
