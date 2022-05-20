@@ -10,21 +10,28 @@ namespace Game
     class Bullet
     {
         private const int bulletSpeed = 14;
+        public bool IsExist { get; set; }
+        public Side Side { get; set; }
 
-        public void Move(Keys key)
+        public void Move(Side side)
         {
-            switch (key)
+            if (!IsExist)
             {
-                case Keys.Left:
+                IsExist = true;
+                Side = side;
+            }
+            switch (Side)
+            {
+                case Side.Left:
                     LoadParameters.bullet.Left -= bulletSpeed;
                     break;
-                case Keys.Right:
+                case Side.Right:
                     LoadParameters.bullet.Left += bulletSpeed;
                     break;
-                case Keys.Down:
+                case Side.Down:
                     LoadParameters.bullet.Top += bulletSpeed;
                     break;
-                case Keys.Up:
+                case Side.Up:
                     LoadParameters.bullet.Top -= bulletSpeed;
                     break;
             }

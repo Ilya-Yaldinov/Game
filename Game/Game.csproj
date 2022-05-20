@@ -94,6 +94,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Sounds.resx</DependentUpon>
     </Compile>
+    <Compile Include="Side.cs" />
     <EmbeddedResource Include="Resources\BoxPicture.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>BoxPicture.Designer.cs</LastGenOutput>

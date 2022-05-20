@@ -43,7 +43,7 @@
             // MainHero
             // 
             this.MainHero.BackColor = System.Drawing.Color.Transparent;
-            this.MainHero.Location = new System.Drawing.Point(569, 95);
+            this.MainHero.Location = new System.Drawing.Point(611, 117);
             this.MainHero.Name = "MainHero";
             this.MainHero.Size = new System.Drawing.Size(70, 80);
             this.MainHero.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;

@@ -12,22 +12,16 @@ namespace Game
         public static PictureBox box { get; set; }
         public static PictureBox enemySprite { get; set; }
         public static Image enemyImage { get; set; }
-        public const string boxObject = "boxObject";
-        public const string enemyObject = "enemyObject";
         public static List<PictureBox> enemyCount = new List<PictureBox>();
 
-        public static void Start(PictureBox mainHero)
-        {
-            BulletSpecifications();
-            BoxSpecifications(mainHero);
-        }
-
-        private static void BulletSpecifications()
+        public static void BulletSpecifications()
         {
             bullet = new PictureBox();
             bullet.BorderStyle = BorderStyle.None;
             bullet.Size = new Size(10, 10);
             bullet.BackColor = Color.Red;
+            Bullet bulletModel = new Bullet();
+            bullet.DataBindings.Add("", bulletModel, "");
         }
 
         public static void BoxSpecifications(PictureBox mainHero)

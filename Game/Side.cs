@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-    class Box
+    public enum Side
     {
-        public int Weight { get; }
-
-        public Box(int weight)
-        {
-            Weight = weight;
-        }
+        Up,
+        Down,
+        Left,
+        Right
     }
 }
