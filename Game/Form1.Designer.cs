@@ -121,7 +121,7 @@
             this.Controls.Add(this.MainHero);
             this.Name = "GameBackGround";
             this.Text = "Game";
-            this.Load += new System.EventHandler(this.Game_Load);
+            this.Load += new System.EventHandler(this.Sprite_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Game_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Game_KeyUp);
             ((System.ComponentModel.ISupportInitialize)(this.MainHero)).EndInit();

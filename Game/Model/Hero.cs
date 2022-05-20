@@ -7,8 +7,8 @@ namespace Game
     class Hero : Character
     {
         public Bullet bullet { get; }
-        public int enemyKillCount { get; private set; }
-        public int boxCount { get; private set; }
+        public int enemyKillCount { get; set; }
+        public int boxCount { get;  set; }
 
         public Hero(int speed) : base(speed){ bullet = new Bullet(); }
 
@@ -17,19 +17,14 @@ namespace Game
             enemyKillCount++;
         }
 
-        public void BoxCountUpdate()
-        {
-            boxCount++;
-        }
-
         public void Shoot()
         {
             bullet.Move(Side);
         }
 
-        public void BoxPickUp()
+        public void BoxPickUp(int weight)
         {
-            
+            boxCount += weight;
         }
     }
 }

@@ -33,7 +33,11 @@ namespace Game
             box.SizeMode = PictureBoxSizeMode.Zoom;
             box.BackColor = Color.Transparent;
             box.Location = new Point(random.Next(10, 1000), random.Next(100, 600));
-            Box boxModel = new Box();
+            int weight;
+            if (box.Image.Equals(LoadBoxes.box1)) weight = 1;
+            else if (box.Image.Equals(LoadBoxes.box3)) weight = 3;
+            else weight = 5;
+            Box boxModel = new Box(weight);
             box.DataBindings.Add(new Binding("", boxModel, ""));
         }
 
