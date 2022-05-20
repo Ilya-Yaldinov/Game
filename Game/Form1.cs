@@ -1,7 +1,6 @@
 ﻿using Game.Resources;
 using System;
 using System.Drawing;
-using System.Media;
 using System.Windows.Forms;
 
 namespace Game
@@ -13,7 +12,7 @@ namespace Game
         private int invulnerability = 0;
         private int count = 0;
         private int winCount = 25;
-        
+
         public GameBackGround()
         {
             InitializeComponent();
@@ -182,9 +181,9 @@ namespace Game
             if (gameModel.liveCount == 0) GameOver();
             if (gameModel.Hero.boxCount >= winCount) GameWon();
         }
+
         private void GameWon()//пауза до нажатия enter
         {
-            Keys isEnter = new Keys();
             PlaySound.Play(Sounds.win);
             EndOfGame.Visible = true;
             EndOfGame.Text = "Уровень пройден.";
