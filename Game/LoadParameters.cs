@@ -6,54 +6,23 @@ using System.Windows.Forms;
 
 namespace Game
 {
-    class LoadParameters
+    static class LoadParameters
     {
-        public PictureBox bullet = null;
-        public PictureBox box = null;
-        public PictureBox enemySprite = null;
-        public Image enemyImage = null;
-        public List<PictureBox> enemyCount = new List<PictureBox>();
-        public Dictionary<string, Image> heroAnimation = new Dictionary<string, Image>();
-        public Dictionary<string, Image> boxes = new Dictionary<string, Image>();
+        public static PictureBox bullet { get; set; }
+        public static PictureBox box { get; set; }
+        public static PictureBox enemySprite { get; set; }
+        public static Image enemyImage { get; set; }
+        public const string boxObject = "boxObject";
+        public const string enemyObject = "enemyObject";
+        public static List<PictureBox> enemyCount = new List<PictureBox>();
 
-        public void Start(PictureBox mainHero)
+        public static void Start(PictureBox mainHero)
         {
-            LoadAnimations();
-            LoadBoxes();
             BulletSpecifications();
             BoxSpecifications(mainHero);
         }
 
-        private void LoadAnimations()
-        {
-            heroAnimation.Add("left", Resources.HeroMovement.hero_left);
-            heroAnimation.Add("up", Resources.HeroMovement.hero_up);
-            heroAnimation.Add("right", Resources.HeroMovement.hero_right);
-            heroAnimation.Add("down", Resources.HeroMovement.hero_down);
-        }
-
-        private void LoadBoxes()
-        {
-            boxes.Add("1box", Resources.BoxPicture._1box);
-            boxes.Add("3box", Resources.BoxPicture._3box);
-            boxes.Add("5box", Resources.BoxPicture._5box);
-        }
-
-        private Image GetBoxImage()
-        {
-            List<Image> images = new List<Image>();
-            Random random = new Random();
-            for (int i = 0; i < 6; i++)
-            {
-                images.Add(boxes["1box"]);
-                if (i < 3) images.Add(boxes["3box"]);
-            }
-            images.Add(boxes["5box"]);
-
-            return images.ElementAt(random.Next(0, 10));
-        }
-
-        private void BulletSpecifications()
+        private static void BulletSpecifications()
         {
             bullet = new PictureBox();
             bullet.BorderStyle = BorderStyle.None;
@@ -61,20 +30,20 @@ namespace Game
             bullet.BackColor = Color.Red;
         }
 
-        public void BoxSpecifications(PictureBox mainHero)
+        public static void BoxSpecifications(PictureBox mainHero)
         {
             Random random = new Random();
             box = new PictureBox();
-            box.Image = GetBoxImage();
+            box.Image = LoadBoxes.GetBoxImage();
             box.Size = new Size(mainHero.Height / 2, mainHero.Width / 2);
             box.SizeMode = PictureBoxSizeMode.Zoom;
             box.BackColor = Color.Transparent;
-            box.Location = new Point(random.Next(10, 1000), random.Next(10, 600));
-
-
+            box.Location = new Point(random.Next(10, 1000), random.Next(100, 600));
+            Box boxModel = new Box();
+            box.DataBindings.Add(new Binding("", boxModel, ""));
         }
 
-        public void EnemySpawn(PictureBox mainHero)
+        public static void EnemySpawn(PictureBox mainHero)
         {
             enemySprite = new PictureBox();
             enemySprite.Image = enemyImage;
@@ -83,6 +52,8 @@ namespace Game
             enemySprite.BackColor = Color.Transparent;
             enemySprite.Location = new Point(640, 360);
             enemyCount.Add(enemySprite);
+            Enemy enemyModel = new Enemy(((Hero)mainHero.DataBindings[0].DataSource).speed);
+            enemySprite.DataBindings.Add(new Binding("", enemyModel, ""));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Game.Resources;
 using System;
 using System.Drawing;
+using System.Media;
 using System.Windows.Forms;
 
 namespace Game
@@ -9,8 +10,8 @@ namespace Game
     {
         private GameModel gameModel;
         private EventHandler action;
-        private int bulletSpeed = 0;
-        private int gameSpeed = 0;
+        
+        private const int gameSpeed = 7;
         private int count = 0;
         private int invulnerability = 0;
         private int enemyKillCount = 0;
@@ -18,16 +19,13 @@ namespace Game
         private int liveCount = 3;
         private int winCount = 25;
         private int currentLevel = 1;
-        private Point direction = Point.Empty;
         private Keys lastKey = Keys.None;
         private Keys bulletKey = Keys.Right;
-        LoadParameters loadParameters = new LoadParameters();
         
-        
-
         public GameBackGround()
         {
             InitializeComponent();
+            gameModel = new GameModel(gameSpeed);
             SetStyle(ControlStyles.OptimizedDoubleBuffer |
                      ControlStyles.AllPaintingInWmPaint |
                      ControlStyles.UserPaint, true);
@@ -36,15 +34,13 @@ namespace Game
 
         private void Game_Load(object sender, EventArgs e)
         {
-            loadParameters.Start(MainHero);
-            this.Controls.Add(loadParameters.box);
+            LoadParameters.Start(MainHero);
+            Controls.Add(LoadParameters.box);
             LevelChange();
             GetHP();
-            MainHero.Image = loadParameters.heroAnimation["right"];
-            gameSpeed = 7;
-            bulletSpeed = gameSpeed * 2;
-            gameModel = new GameModel(gameSpeed);
+            MainHero.Image = HeroMoveAnimations.right;
             gameModel.hero.location = MainHero.Location;
+            MainHero.DataBindings.Add(new Binding("", gameModel.hero, ""));
             gameModel.hero.OnMove += location =>
             {
                 MainHero.Location = location;
@@ -56,33 +52,32 @@ namespace Game
             switch (currentLevel)
             {
                 case 1:
-                    this.BackgroundImage = GameBG.lvl_1;
-                    loadParameters.enemyImage = EnemyMovement.spider;
+                    BackgroundImage = GameBG.lvl_1;
+                    LoadParameters.enemyImage = EnemyMovement.spider;
                     break;
                 case 2:
-                    this.BackgroundImage = GameBG.lvl_2;
-                    loadParameters.enemyImage = EnemyMovement.skelet;
+                    BackgroundImage = GameBG.lvl_2;
+                    LoadParameters.enemyImage = EnemyMovement.skelet;
                     break;
                 case 3:
-                    this.BackgroundImage = GameBG.lvl_3;
-                    loadParameters.enemyImage = EnemyMovement.ghost;
+                    BackgroundImage = GameBG.lvl_3;
+                    LoadParameters.enemyImage = EnemyMovement.ghost;
                     break;
                 case 4:
-                    this.BackgroundImage = GameBG.lvl_4;
-                    loadParameters.enemyImage = EnemyMovement.zombi;
+                    BackgroundImage = GameBG.lvl_4;
+                    LoadParameters.enemyImage = EnemyMovement.zombi;
                     break;
                 case 5:
-                    this.BackgroundImage = GameBG.lvl_5;
-                    loadParameters.enemyImage = EnemyMovement.eye;
+                    BackgroundImage = GameBG.lvl_5;
+                    LoadParameters.enemyImage = EnemyMovement.eye;
                     break;
-                default:
+                case 6:
                     EndOfGame.Visible = true;
                     EndOfGame.Text = "Вы победили";
                     GameProgressTimer.Stop();
                     break;
-
             }
-            this.BackgroundImageLayout = ImageLayout.Stretch;
+            BackgroundImageLayout = ImageLayout.Stretch;
         }
 
         private void HeroMove(Keys key)
@@ -92,26 +87,27 @@ namespace Game
             {
                 case Keys.Left:
                     gameModel.hero.MoveLeft();
-                    if (MainHero.Image != loadParameters.heroAnimation["left"]) MainHero.Image = loadParameters.heroAnimation["left"];
+                    if (MainHero.Image != HeroMoveAnimations.left) MainHero.Image = HeroMoveAnimations.left;
                     break;
                 case Keys.Right:
                     gameModel.hero.MoveRight();
-                    if (MainHero.Image != loadParameters.heroAnimation["right"]) MainHero.Image = loadParameters.heroAnimation["right"];
+                    if (MainHero.Image != HeroMoveAnimations.right) MainHero.Image = HeroMoveAnimations.right;
                     break;
                 case Keys.Up:
                     gameModel.hero.MoveUp();
-                    if (MainHero.Image != loadParameters.heroAnimation["up"]) MainHero.Image = loadParameters.heroAnimation["up"];
+                    if (MainHero.Image != HeroMoveAnimations.up) MainHero.Image = HeroMoveAnimations.up;
                     break;
                 case Keys.Down:
                     gameModel.hero.MoveDown();
-                    if (MainHero.Image != loadParameters.heroAnimation["down"]) MainHero.Image = loadParameters.heroAnimation["down"];
+                    if (MainHero.Image != HeroMoveAnimations.down) MainHero.Image = HeroMoveAnimations.down;
                     break;
                 case Keys.Space:
-                    if (loadParameters.bullet.Left > 1280 || loadParameters.bullet.Left < 0 || loadParameters.bullet.Top < 0 || loadParameters.bullet.Top > 720)
+                    if (LoadParameters.bullet.Left > 1280 || LoadParameters.bullet.Left < 0 || LoadParameters.bullet.Top < 0 || LoadParameters.bullet.Top > 720)
                     {
+                        PlaySound.Play(Sounds.shoot);
                         bulletKey = lastKey;
-                        loadParameters.bullet.Location = new Point(MainHero.Location.X + MainHero.Height/2, MainHero.Location.Y + MainHero.Width/2);
-                        this.Controls.Add(loadParameters.bullet);
+                        LoadParameters.bullet.Location = new Point(MainHero.Location.X + MainHero.Height/2, MainHero.Location.Y + MainHero.Width/2);
+                        Controls.Add(LoadParameters.bullet);
                     }
                     break;
             }
@@ -130,21 +126,23 @@ namespace Game
             MoveTimer.Stop();
         }
 
-        private void Interspect()//смерть сделать
+        private void Interspect()
         {
             PictureBox deletEnemy = null;
-            foreach(PictureBox en in loadParameters.enemyCount)
+            foreach(PictureBox en in LoadParameters.enemyCount)
             {
-                if (loadParameters.bullet.Bounds.IntersectsWith(en.Bounds))
+                if (LoadParameters.bullet.Bounds.IntersectsWith(en.Bounds))
                 {
-                    this.Controls.Remove(en);
-                    this.Controls.Remove(loadParameters.bullet);
+                    PlaySound.Play(Sounds.hitEnemy);
+                    Controls.Remove(en);
+                    Controls.Remove(LoadParameters.bullet);
                     enemyKillCount++;
                     deletEnemy = en;
                 }
                 if (MainHero.Bounds.IntersectsWith(en.Bounds))
                 {
-                    if(count - invulnerability > 100)
+                    PlaySound.Play(Sounds.hitHeart);
+                    if (count - invulnerability > 100)
                     {
                         liveCount--;
                         GetHP();
@@ -152,56 +150,22 @@ namespace Game
                     }
                 }
             }
-            loadParameters.enemyCount.Remove(deletEnemy);
-            if (MainHero.Bounds.IntersectsWith(loadParameters.box.Bounds))
+            LoadParameters.enemyCount.Remove(deletEnemy);
+            if (MainHero.Bounds.IntersectsWith(LoadParameters.box.Bounds))
             {
-                if (loadParameters.box.Image.Equals(loadParameters.boxes["1box"])) boxCount += 1;
-                if (loadParameters.box.Image.Equals(loadParameters.boxes["3box"])) boxCount += 3;
-                if (loadParameters.box.Image.Equals(loadParameters.boxes["5box"])) boxCount += 5;
-                this.Controls.Remove(loadParameters.box);
-                loadParameters.BoxSpecifications(MainHero);
-                this.Controls.Add(loadParameters.box);
+                PlaySound.Play(Sounds.pickupBox);
+                if (LoadParameters.box.Image.Equals(LoadBoxes.box1)) boxCount += 1;
+                if (LoadParameters.box.Image.Equals(LoadBoxes.box3)) boxCount += 3;
+                if (LoadParameters.box.Image.Equals(LoadBoxes.box5)) boxCount += 5;
+                Controls.Remove(LoadParameters.box);
+                LoadParameters.BoxSpecifications(MainHero);
+                Controls.Add(LoadParameters.box);
             }
         }
 
-        private void BulletMovement(Keys key)
-        {
-            switch (key)
-            {
-                case Keys.Left:
-                    loadParameters.bullet.Left -= bulletSpeed;
-                    break;
-                case Keys.Right:
-                    loadParameters.bullet.Left += bulletSpeed;
-                    break;
-                case Keys.Down:
-                    loadParameters.bullet.Top += bulletSpeed;
-                    break;
-                case Keys.Up:
-                    loadParameters.bullet.Top -= bulletSpeed;
-                    break;
-            }
-        }
+        
 
-        private void RandomMoveEnemys()
-        {
-            Random random = new Random();
-            direction.X = random.Next(-1, 2);
-            direction.Y = random.Next(-1, 2);
-            MoveEnemys();
-        }
-
-        private void MoveEnemys()//за рамки выходит
-        {
-            foreach (PictureBox en in loadParameters.enemyCount)
-            {
-                Point p = en.Location;
-                en.Left += direction.X * gameSpeed * 4;
-                en.Top += direction.Y * gameSpeed * 4;
-                if (p.X < 0 || p.X > 400) direction.X *= -1;
-                if (p.Y < 0 || p.Y > 1000) direction.Y *= -1;
-            }
-        }
+        
 
         private void GameProgressTimer_Tick(object sender, EventArgs e)
         {
@@ -211,11 +175,20 @@ namespace Game
             count++;
             Console.WriteLine(count);
             BulletMovement(bulletKey);
-            if(count % 10 == 0) RandomMoveEnemys();
+            if (count % 10 == 0)
+            {
+                foreach(var child in Controls)
+                {
+                    if (child is PictureBox box)
+                        if(box.DataBindings.Count != 0)
+                            if (box.DataBindings[0].DataSource is Enemy enemy)
+                                enemy.Move();
+                }
+            }
             if (count % 400 == 0)
             {
-                loadParameters.EnemySpawn(MainHero);
-                this.Controls.Add(loadParameters.enemySprite);
+                LoadParameters.EnemySpawn(MainHero);
+                Controls.Add(LoadParameters.enemySprite);
             }
             if (liveCount == 0) GameOver();
             if (boxCount >= winCount) GameWon();
@@ -240,27 +213,32 @@ namespace Game
 
         private void GameWon()//пауза до нажатия enter
         {
+            Keys isEnter = new Keys();
+            PlaySound.Play(Sounds.win);
             EndOfGame.Visible = true;
             EndOfGame.Text = "Уровень пройден.";
+            while (isEnter != Keys.Enter) ;
             GameProgressTimer.Stop();
             currentLevel++;
+            invulnerability = 0;
             LevelChange();
             liveCount = 3;
             GetHP();
             boxCount = 0;
             enemyKillCount = 0;
             count = 0;
-            foreach(PictureBox en in loadParameters.enemyCount)
+            foreach(PictureBox en in LoadParameters.enemyCount)
             {
-                this.Controls.Remove(en);
+                Controls.Remove(en);
             }
             EndOfGame.Visible = false;
-            loadParameters.enemyCount.Clear();
+            LoadParameters.enemyCount.Clear();
             GameProgressTimer.Start();
         }
 
         private void GameOver()
         {
+            PlaySound.Play(Sounds.lose);
             LivePicture.Image = HP._0hp;
             MainHero.Visible = false;
             EndOfGame.Visible = true;
