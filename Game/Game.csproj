@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="GameModel.cs" />
     <Compile Include="Hero.cs" />
+    <Compile Include="LoadParameters.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\BoxPicture.Designer.cs">
@@ -191,6 +192,30 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Debug\Hero\hero_up.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\BackGrounds\lvl_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\BackGrounds\lvl_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\BackGrounds\lvl_4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\BackGrounds\lvl_5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Enemy\eye.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Enemy\skelet.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Enemy\zombi.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Enemy\spider.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

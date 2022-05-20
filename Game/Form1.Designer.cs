@@ -112,6 +112,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(1264, 681);
             this.Controls.Add(this.LivePicture);
             this.Controls.Add(this.EndOfGame);
@@ -131,14 +132,13 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox MainHero;
         private System.Windows.Forms.Timer MoveTimer;
         private System.Windows.Forms.Timer GameProgressTimer;
         private System.Windows.Forms.Label KillLable;
         private System.Windows.Forms.Label BoxCount;
         private System.Windows.Forms.Label EndOfGame;
         private System.Windows.Forms.PictureBox LivePicture;
+        private System.Windows.Forms.PictureBox MainHero;
     }
 }
 

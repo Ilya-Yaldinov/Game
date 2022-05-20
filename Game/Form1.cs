@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using Game.Resources;
+using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Game
@@ -14,9 +9,6 @@ namespace Game
     {
         private GameModel gameModel;
         private EventHandler action;
-        private PictureBox bullet = null;
-        private PictureBox box = null;
-        private PictureBox enemySprite = null;
         private int bulletSpeed = 0;
         private int gameSpeed = 0;
         private int count = 0;
@@ -24,13 +16,14 @@ namespace Game
         private int enemyKillCount = 0;
         private int boxCount = 0;
         private int liveCount = 3;
-        private int winCount = 50;
+        private int winCount = 25;
+        private int currentLevel = 1;
         private Point direction = Point.Empty;
         private Keys lastKey = Keys.None;
         private Keys bulletKey = Keys.Right;
-        private List<PictureBox> enemyCount = new List<PictureBox>();
-        private Dictionary<string, Image> heroAnimation = new Dictionary<string, Image>();
-        private Dictionary<string, Image> boxes = new Dictionary<string, Image>();
+        LoadParameters loadParameters = new LoadParameters();
+        
+        
 
         public GameBackGround()
         {
@@ -41,76 +34,13 @@ namespace Game
             UpdateStyles();
         }
 
-        private void LoadAnimations()
-        {
-            heroAnimation.Add("left", Resources.HeroMovement.hero_left);
-            heroAnimation.Add("up", Resources.HeroMovement.hero_up);
-            heroAnimation.Add("right", Resources.HeroMovement.hero_right);
-            heroAnimation.Add("down", Resources.HeroMovement.hero_down);
-        }
-
-        private void LoadBoxes()
-        {
-            boxes.Add("1box", Resources.BoxPicture._1box);
-            boxes.Add("3box", Resources.BoxPicture._3box);
-            boxes.Add("5box", Resources.BoxPicture._5box);
-        }
-
-        private void BoxSpecifications()
-        {
-            Random random = new Random();
-            box = new PictureBox();
-            box.Image = GetBoxImage();
-            box.Size = new Size(MainHero.Height/2, MainHero.Width/2);
-            box.SizeMode = PictureBoxSizeMode.Zoom;
-            box.BackColor = Color.Transparent;
-            box.Location = new Point(random.Next(10, 1000), random.Next(10, 600));
-
-            this.Controls.Add(box);
-        }
-
-        private Image GetBoxImage()
-        {
-            List<Image> images = new List<Image>();
-            Random random = new Random();
-            for(int i = 0; i < 6; i++)
-            {
-                images.Add(boxes["1box"]);
-                if(i<3) images.Add(boxes["3box"]);
-            }
-            images.Add(boxes["5box"]);
-
-            return images.ElementAt(random.Next(0,10));
-        }
-
-        private void BulletSpecifications()
-        {
-            bullet = new PictureBox();
-            bullet.BorderStyle = BorderStyle.None;
-            bullet.Size = new Size(10, 10);
-            bullet.BackColor = Color.Red;
-        }
-
-        private void EnemySpawn()
-        {
-            enemySprite = new PictureBox();
-            enemySprite.Image = Resources.EnemyMovement.ghost;
-            enemySprite.Size = new Size(MainHero.Height, MainHero.Width);
-            enemySprite.SizeMode = PictureBoxSizeMode.Zoom;
-            enemySprite.BackColor = Color.Transparent;
-            enemySprite.Location = new Point(640, 360);
-            enemyCount.Add(enemySprite);
-
-            this.Controls.Add(enemySprite);
-        }
-
         private void Game_Load(object sender, EventArgs e)
         {
-            LoadAnimations();
-            LoadBoxes();
-            BulletSpecifications();
-            BoxSpecifications();
-            MainHero.Image = heroAnimation["right"];
+            loadParameters.Start(MainHero);
+            this.Controls.Add(loadParameters.box);
+            LevelChange();
+            GetHP();
+            MainHero.Image = loadParameters.heroAnimation["right"];
             gameSpeed = 7;
             bulletSpeed = gameSpeed * 2;
             gameModel = new GameModel(gameSpeed);
@@ -121,6 +51,40 @@ namespace Game
             };
         }
 
+        private void LevelChange()
+        {
+            switch (currentLevel)
+            {
+                case 1:
+                    this.BackgroundImage = GameBG.lvl_1;
+                    loadParameters.enemyImage = EnemyMovement.spider;
+                    break;
+                case 2:
+                    this.BackgroundImage = GameBG.lvl_2;
+                    loadParameters.enemyImage = EnemyMovement.skelet;
+                    break;
+                case 3:
+                    this.BackgroundImage = GameBG.lvl_3;
+                    loadParameters.enemyImage = EnemyMovement.ghost;
+                    break;
+                case 4:
+                    this.BackgroundImage = GameBG.lvl_4;
+                    loadParameters.enemyImage = EnemyMovement.zombi;
+                    break;
+                case 5:
+                    this.BackgroundImage = GameBG.lvl_5;
+                    loadParameters.enemyImage = EnemyMovement.eye;
+                    break;
+                default:
+                    EndOfGame.Visible = true;
+                    EndOfGame.Text = "Вы победили";
+                    GameProgressTimer.Stop();
+                    break;
+
+            }
+            this.BackgroundImageLayout = ImageLayout.Stretch;
+        }
+
         private void HeroMove(Keys key)
         {
             if(key != Keys.Space) lastKey = key;
@@ -128,26 +92,26 @@ namespace Game
             {
                 case Keys.Left:
                     gameModel.hero.MoveLeft();
-                    if (MainHero.Image != heroAnimation["left"]) MainHero.Image = heroAnimation["left"];
+                    if (MainHero.Image != loadParameters.heroAnimation["left"]) MainHero.Image = loadParameters.heroAnimation["left"];
                     break;
                 case Keys.Right:
                     gameModel.hero.MoveRight();
-                    if (MainHero.Image != heroAnimation["right"]) MainHero.Image = heroAnimation["right"];
+                    if (MainHero.Image != loadParameters.heroAnimation["right"]) MainHero.Image = loadParameters.heroAnimation["right"];
                     break;
                 case Keys.Up:
                     gameModel.hero.MoveUp();
-                    if (MainHero.Image != heroAnimation["up"]) MainHero.Image = heroAnimation["up"];
+                    if (MainHero.Image != loadParameters.heroAnimation["up"]) MainHero.Image = loadParameters.heroAnimation["up"];
                     break;
                 case Keys.Down:
                     gameModel.hero.MoveDown();
-                    if (MainHero.Image != heroAnimation["down"]) MainHero.Image = heroAnimation["down"];
+                    if (MainHero.Image != loadParameters.heroAnimation["down"]) MainHero.Image = loadParameters.heroAnimation["down"];
                     break;
                 case Keys.Space:
-                    if (bullet.Left > 1280 || bullet.Left < 0 || bullet.Top < 0 || bullet.Top > 720)
+                    if (loadParameters.bullet.Left > 1280 || loadParameters.bullet.Left < 0 || loadParameters.bullet.Top < 0 || loadParameters.bullet.Top > 720)
                     {
                         bulletKey = lastKey;
-                        bullet.Location = new Point(MainHero.Location.X + MainHero.Height/2, MainHero.Location.Y + MainHero.Width/2);
-                        this.Controls.Add(bullet);
+                        loadParameters.bullet.Location = new Point(MainHero.Location.X + MainHero.Height/2, MainHero.Location.Y + MainHero.Width/2);
+                        this.Controls.Add(loadParameters.bullet);
                     }
                     break;
             }
@@ -169,12 +133,12 @@ namespace Game
         private void Interspect()//смерть сделать
         {
             PictureBox deletEnemy = null;
-            foreach(PictureBox en in enemyCount)
+            foreach(PictureBox en in loadParameters.enemyCount)
             {
-                if (bullet.Bounds.IntersectsWith(en.Bounds))
+                if (loadParameters.bullet.Bounds.IntersectsWith(en.Bounds))
                 {
                     this.Controls.Remove(en);
-                    this.Controls.Remove(bullet);
+                    this.Controls.Remove(loadParameters.bullet);
                     enemyKillCount++;
                     deletEnemy = en;
                 }
@@ -183,18 +147,20 @@ namespace Game
                     if(count - invulnerability > 100)
                     {
                         liveCount--;
+                        GetHP();
                         invulnerability = count;
                     }
                 }
             }
-            enemyCount.Remove(deletEnemy);
-            if (MainHero.Bounds.IntersectsWith(box.Bounds))
+            loadParameters.enemyCount.Remove(deletEnemy);
+            if (MainHero.Bounds.IntersectsWith(loadParameters.box.Bounds))
             {
-                if (box.Image.Equals(boxes["1box"])) boxCount += 1;
-                if (box.Image.Equals(boxes["3box"])) boxCount += 3;
-                if (box.Image.Equals(boxes["5box"])) boxCount += 5;
-                this.Controls.Remove(box);
-                BoxSpecifications();
+                if (loadParameters.box.Image.Equals(loadParameters.boxes["1box"])) boxCount += 1;
+                if (loadParameters.box.Image.Equals(loadParameters.boxes["3box"])) boxCount += 3;
+                if (loadParameters.box.Image.Equals(loadParameters.boxes["5box"])) boxCount += 5;
+                this.Controls.Remove(loadParameters.box);
+                loadParameters.BoxSpecifications(MainHero);
+                this.Controls.Add(loadParameters.box);
             }
         }
 
@@ -203,16 +169,16 @@ namespace Game
             switch (key)
             {
                 case Keys.Left:
-                    bullet.Left -= bulletSpeed;
+                    loadParameters.bullet.Left -= bulletSpeed;
                     break;
                 case Keys.Right:
-                    bullet.Left += bulletSpeed;
+                    loadParameters.bullet.Left += bulletSpeed;
                     break;
                 case Keys.Down:
-                    bullet.Top += bulletSpeed;
+                    loadParameters.bullet.Top += bulletSpeed;
                     break;
                 case Keys.Up:
-                    bullet.Top -= bulletSpeed;
+                    loadParameters.bullet.Top -= bulletSpeed;
                     break;
             }
         }
@@ -227,7 +193,7 @@ namespace Game
 
         private void MoveEnemys()//за рамки выходит
         {
-            foreach (PictureBox en in enemyCount)
+            foreach (PictureBox en in loadParameters.enemyCount)
             {
                 Point p = en.Location;
                 en.Left += direction.X * gameSpeed * 4;
@@ -239,7 +205,6 @@ namespace Game
 
         private void GameProgressTimer_Tick(object sender, EventArgs e)
         {
-            GetHP();
             Interspect();
             KillLable.Text = $"Противников убито: {enemyKillCount}";
             BoxCount.Text = $"Коробочек собранно: {boxCount}";
@@ -247,16 +212,13 @@ namespace Game
             Console.WriteLine(count);
             BulletMovement(bulletKey);
             if(count % 10 == 0) RandomMoveEnemys();
-            if (count % 400 == 0) EnemySpawn();
+            if (count % 400 == 0)
+            {
+                loadParameters.EnemySpawn(MainHero);
+                this.Controls.Add(loadParameters.enemySprite);
+            }
             if (liveCount == 0) GameOver();
             if (boxCount >= winCount) GameWon();
-        }
-
-        private void GameWon()
-        {
-            EndOfGame.Visible = true;
-            EndOfGame.Text = "Вы победили.";
-            GameProgressTimer.Stop();
         }
 
         private void GetHP()
@@ -265,20 +227,41 @@ namespace Game
             switch (liveCount)
             {
                 case 3:
-                    LivePicture.Image = Resources.HP._3hp;
+                    LivePicture.Image = HP._3hp;
                     break;
                 case 2:
-                    LivePicture.Image = Resources.HP._2hp;
+                    LivePicture.Image = HP._2hp;
                     break;
                 case 1:
-                    LivePicture.Image = Resources.HP._1hp;
+                    LivePicture.Image = HP._1hp;
                     break;
             }
         }
 
+        private void GameWon()//пауза до нажатия enter
+        {
+            EndOfGame.Visible = true;
+            EndOfGame.Text = "Уровень пройден.";
+            GameProgressTimer.Stop();
+            currentLevel++;
+            LevelChange();
+            liveCount = 3;
+            GetHP();
+            boxCount = 0;
+            enemyKillCount = 0;
+            count = 0;
+            foreach(PictureBox en in loadParameters.enemyCount)
+            {
+                this.Controls.Remove(en);
+            }
+            EndOfGame.Visible = false;
+            loadParameters.enemyCount.Clear();
+            GameProgressTimer.Start();
+        }
+
         private void GameOver()
         {
-            LivePicture.Image = Resources.HP._0hp;
+            LivePicture.Image = HP._0hp;
             MainHero.Visible = false;
             EndOfGame.Visible = true;
             EndOfGame.Text = "Игра окончена.";
