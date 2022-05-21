@@ -12,6 +12,7 @@ namespace Game
         private int invulnerability = 0;
         private int count = 0;
         private int winCount = 25;
+        private bool isLevelEnd;
 
         public GameBackGround()
         {
@@ -113,6 +114,7 @@ namespace Game
                     GameProgressTimer.Stop();
                     break;
             }
+            winCount += 25;
             BackgroundImageLayout = ImageLayout.Stretch;
         }
 
@@ -134,6 +136,10 @@ namespace Game
             MoveTimer.Tick -= action;
             action = (obj, args) => gameModel.HeroMove(e.KeyCode, MainHero);
             MoveTimer.Tick += action;
+            if(isLevelEnd && e.KeyCode == Keys.Enter)
+            {
+                NextLevelGeneration();
+            }
         }
 
         private void Game_KeyUp(object sender, KeyEventArgs e)
@@ -148,21 +154,9 @@ namespace Game
             KillLable.Text = $"Противников убито: {gameModel.Hero.enemyKillCount}";
             BoxCount.Text = $"Коробочек собранно: {gameModel.Hero.boxCount}";
             count++;
-            if(gameModel.Hero.bullet.IsExist)
-            {
-                if (!(LoadParameters.bullet.Left > 1280 || LoadParameters.bullet.Left < 0 || LoadParameters.bullet.Top < 0 || LoadParameters.bullet.Top > 720))
-                {
-                    gameModel.Hero.Shoot();
-                }
-                else
-                {
-                    PlaySound.Play(Sounds.shoot);
-                    LoadParameters.bullet.Location = new Point(MainHero.Location.X + MainHero.Height / 2, MainHero.Location.Y + MainHero.Width / 2);
-                    gameModel.Hero.bullet.IsExist = false;
-                    Controls.Add(LoadParameters.bullet);
-                }
-            }
-            
+            gameModel.Hero.Shoot();
+            Controls.Add(LoadParameters.bullet);
+
             if (count % 10 == 0)
             {
                 foreach(var child in Controls)
@@ -182,13 +176,22 @@ namespace Game
             if (gameModel.Hero.boxCount >= winCount) GameWon();
         }
 
-        private void GameWon()//пауза до нажатия enter
+        private void GameWon()
         {
             PlaySound.Play(Sounds.win);
             EndOfGame.Visible = true;
             EndOfGame.Text = "Уровень пройден.";
+            invulnerability = 0;
+            count = 0;
             GameProgressTimer.Stop();
+            Controls.Remove(LoadParameters.box);
+            isLevelEnd = true;
+        }
+
+        private void NextLevelGeneration()
+        {
             gameModel.NextLevel();
+            GetHP();
             LevelChange();
             foreach (PictureBox en in LoadParameters.enemyCount)
             {
@@ -196,7 +199,6 @@ namespace Game
             }
             LoadParameters.enemyCount.Clear();
             EndOfGame.Visible = false;
-            LoadParameters.enemyCount.Clear();
             GameProgressTimer.Start();
         }
 

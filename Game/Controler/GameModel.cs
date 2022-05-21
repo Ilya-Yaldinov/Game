@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using Game.Resources;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Game
 {
@@ -49,7 +51,12 @@ namespace Game
                     if (mainHero.Image != HeroMoveAnimations.down) mainHero.Image = HeroMoveAnimations.down;
                     break;
                 case Keys.Space:
-                    Hero.Shoot();
+                    if (LoadParameters.bullet.Left > 1280 || LoadParameters.bullet.Left < 0 || LoadParameters.bullet.Top < 0 || LoadParameters.bullet.Top > 720)
+                    {
+                        PlaySound.Play(Sounds.shoot);
+                        LoadParameters.bullet.Location = new Point(mainHero.Location.X + mainHero.Height / 2, mainHero.Location.Y + mainHero.Width / 2);
+                        Hero.bullet.IsExist = false;
+                    }
                     break;
             }
         }
