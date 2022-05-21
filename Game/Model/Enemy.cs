@@ -27,8 +27,8 @@ namespace Game
             foreach (PictureBox enemy in LoadParameters.enemyCount)
             {
                 Point p = enemy.Location;
-                enemy.Left += direction.X * enemyMoveSpeed * 4;
-                enemy.Top += direction.Y * enemyMoveSpeed * 4;
+                enemy.Left += direction.X * enemyMoveSpeed * 3;
+                enemy.Top += direction.Y * enemyMoveSpeed * 3;
                 if (p.X < 0 || p.X > 400) direction.X *= -1;
                 if (p.Y < 0 || p.Y > 1000) direction.Y *= -1;
             }

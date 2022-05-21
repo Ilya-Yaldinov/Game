@@ -11,7 +11,8 @@ namespace Game
         private EventHandler action;
         private int invulnerability = 0;
         private int count = 0;
-        private int winCount = 25;
+        private int winCount = 0;
+        private int enemySpawnCount = 410;
         private bool isLevelEnd;
 
         public GameBackGround()
@@ -114,6 +115,7 @@ namespace Game
                     GameProgressTimer.Stop();
                     break;
             }
+            enemySpawnCount -= 15;
             winCount += 25;
             BackgroundImageLayout = ImageLayout.Stretch;
         }
@@ -167,7 +169,7 @@ namespace Game
                                 enemy.Move();
                 }
             }
-            if (count % 400 == 0)
+            if (count % enemySpawnCount == 0)
             {
                 LoadParameters.EnemySpawn(MainHero);
                 Controls.Add(LoadParameters.enemySprite);
@@ -199,6 +201,7 @@ namespace Game
             }
             LoadParameters.enemyCount.Clear();
             EndOfGame.Visible = false;
+            Controls.Add(LoadParameters.box);
             GameProgressTimer.Start();
         }
 
